@@ -7,13 +7,14 @@ import { Link, useHistory } from 'react-router-dom';
 const AddMovieForm = (props) => {
     const { push } = useHistory();
 
-    const [movie, setMovie] = useState({
-        title: "",
-        director: "",
-        genre: "",
-        metascore: 0,
-        description:""
-    });
+    // const [movie, setMovie] = useState({
+    //     title: "",
+    //     director: "",
+    //     genre: "",
+    //     metascore: 0,
+    //     description:""
+    // });
+    const { movie } = props;
 
     const handleChange = (e) => {
         setMovie({
@@ -23,6 +24,9 @@ const AddMovieForm = (props) => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
+        addMovie(movie);
+        push('/movies/');
     }
 
     const { title, director, genre, metascore, description } = movie;
@@ -58,7 +62,7 @@ const AddMovieForm = (props) => {
                         			
                     </div>
                     <div className="modal-footer">
-                        <input type="submit" className="btn btn-success" value="Add"/>
+                        <input type="submit" className="btn btn-success" value="Add" onClick={() => handleSubmit} />
                         <Link to={`/movies`}><input type="button" className="btn btn-default" value="Cancel"/></Link>
                     </div>
                 </form>
@@ -67,4 +71,10 @@ const AddMovieForm = (props) => {
     </div>);
 }
 
-export default AddMovieForm;
+const mapStateToProps = state => {
+    return {
+        movie: state.movie
+    }
+}
+
+export default connect(mapStateToProps, { addMovie })(AddMovieForm);
